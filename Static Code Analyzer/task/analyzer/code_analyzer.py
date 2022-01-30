@@ -25,6 +25,8 @@ with open(path_to_file, "r") as file:
 
 # Iterating over the lines
 for line in range(len(code)):
+    comment_start_index = code[line].find("#")
+
     if len(code[line]) > 49:
         print(f"Line {line + 1}: S001", errors["S001"])
 
@@ -34,29 +36,19 @@ for line in range(len(code)):
             print(f"Line {line + 1}: S002", errors["S002"])
 
     if ";" in code[line]:
-        if "#" not in code[line]:
-            if code[line][-1] == ";":
-                print(f"Line {line + 1}: S003", errors["S003"])
-
-        elif code[line].find("#") > code[line].find(";"):
+        if any([comment_start_index == -1 and code[line][-1] == ";",
+                comment_start_index > code[line].find(";")]):
             print(f"Line {line + 1}: S003", errors["S003"])
 
     if len(code[line]) >= 3 and "#" in code[line]:
-        comment_start_index = code[line].lower().find("#")
-
         if comment_start_index > 0 and code[line].find("  ") != comment_start_index - 2:
             print(f"Line {line + 1}: S004", errors["S004"])
 
 
     if "todo" in code[line].lower():
-        comment_start_index = code[line].lower().find("#")
         if comment_start_index != -1 and comment_start_index < code[line].lower().find("todo"):
             print(f"Line {line + 1}: S005", errors["S005"])
 
     if line >= 2 and code[line] != "":
         if code[line-1] == code[line-2] == code[line-3]:
             print(f"Line {line + 1}: S006", errors["S006"])
-
-    #if code[line] == 'print("check")':
-    #    print(code)
-    #    exit()
