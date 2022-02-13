@@ -1,4 +1,4 @@
-import re
+# import re
 import sys
 from os.path import exists
 import os
@@ -21,9 +21,6 @@ errors = {
 
 
 def scan_code(code, _path):
-    # Iterating over the lines
-    # mode
-
     for line in range(len(code)):
         comment_start_index = code[line].find("#")
 
@@ -68,12 +65,9 @@ def scan_code(code, _path):
                 print(f"{_path}: Line {line + 1}: S009", errors["S009"])
         """
 
-# "/Users/aleksander/PycharmProjects/Static Code Analyzer/Static Code Analyzer/task/test"
-# "/Users/aleksander/Desktop/Python"
 
 if len(sys.argv) != 2:
     exit(print("error. 2 positional arguments expected."))
-
 
 path = sys.argv[1].lower()
 
@@ -81,7 +75,7 @@ mode = "file" if path.endswith(".py") else "dir"
 
 
 if not exists(path):
-   exit(print('path does not exist'))
+    exit(print('path does not exist'))
 
 
 if mode == "file":
@@ -100,15 +94,8 @@ else:
                 # it is important to join the path at this moment in case of inner folders
                 scripts_list.append(os.path.join(dirpath, file_name))
 
-
     scripts_list = sorted(scripts_list)
-
     for python_script in scripts_list:
         with open(python_script, "r") as file:
             code_as_list: list = [x.strip("\n") for x in file.readlines()]
             scan_code(code_as_list, python_script)
-
-
-
-
-
