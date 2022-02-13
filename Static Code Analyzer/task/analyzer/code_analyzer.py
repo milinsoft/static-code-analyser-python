@@ -92,18 +92,23 @@ if mode == "file":
 
 else:
 
-    current_path = os.getcwd()
-    os.chdir(path)
+    scripts_list = []
 
-    python_scripts: list = sorted([x.name for x in os.scandir() if x.name.endswith(".py")])
+    for dirpath, dirnames, files in os.walk(path):
+        for file_name in files:
+            if file_name.endswith('.py'):
+                # it is important to join the path at this moment in case of inner folders
+                scripts_list.append(os.path.join(dirpath, file_name))
 
-    _all = sorted([x.name for x in os.scandir()])
 
+    scripts_list = sorted(scripts_list)
 
-    for script in python_scripts:
-
-        with open(script, "r") as file:
+    for python_script in scripts_list:
+        with open(python_script, "r") as file:
             code_as_list: list = [x.strip("\n") for x in file.readlines()]
-            scan_code(code_as_list, script)
+            scan_code(code_as_list, python_script)
+
+
+
 
 
