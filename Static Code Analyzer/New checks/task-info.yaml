@@ -2,8 +2,97 @@ type: edu
 files:
 - name: analyzer/code_analyzer.py
   visible: true
+  text: |+
+    from os.path import exists
+
+
+    path_to_file = input()
+
+    if not exists(path_to_file):
+        exit()
+
+    with open(path_to_file, "r") as file:
+        code = [x.strip("\n") for x in file.readlines()]
+
+
+    for line in range(len(code)):
+        if len(code[line]) > 49:
+            print(f"Line {line + 1}: S001 Too long. Please make sure that each line is no longer than 49 characters")
+
+  learner_created: false
+- name: test/test_1.py
+  visible: false
   text: |
-    # write your code here
+    print('hello')
+     print('hello')
+      print('hello')
+        print('hello')
+          print('hello')
+            print('hello')
+  learner_created: false
+- name: test/test_2.py
+  visible: false
+  text: |
+    print('hello')
+    print('hello');
+    print('hello');;;
+    print('hello');  # hello
+    # hello hello hello;
+    greeting = 'hello;'
+    print('hello')  # ;
+  learner_created: false
+- name: test/test_3.py
+  visible: false
+  text: |
+    print('hello')
+    print('hello')  # TODO
+    print('hello')  # TODO # TODO
+    # todo
+    # TODO just do it
+    print('todo')
+    print('TODO TODO')
+    todo()
+    todo = 'todo'
+  learner_created: false
+- name: test/test_4.py
+  visible: false
+  text: |
+    print("hello")
+
+
+    print("bye")
+
+
+
+    print("check")
+  learner_created: false
+- name: test/test_5.py
+  visible: false
+  text: |-
+    print('hello!')
+    # just a comment
+    print('hello!')  #
+    print('hello!')  # hello
+
+    print('hello!') # hello
+    print('hello!')# hello
+  learner_created: false
+- name: test/test_6.py
+  visible: false
+  text: |
+    print('What\'s your name?') # reading an input
+    name = input();
+    print(f'Hello, {name}');  # here is an obvious comment: this prints greeting with a name
+
+
+    very_big_number = 11_000_000_000_000_000_000_000_000_000_000_000_000_000_000_000
+    print(very_big_number)
+
+
+
+    def some_fun():
+        print('NO TODO HERE;;')
+        pass; # Todo something
   learner_created: false
 - name: tests.py
   visible: false
@@ -220,40 +309,6 @@ files:
     if __name__ == '__main__':
         AnalyzerTest("analyzer.code_analyzer").run_tests()
   learner_created: false
-- name: test/test_2.py
-  visible: false
-  text: |
-    print('hello')
-    print('hello');
-    print('hello');;;
-    print('hello');  # hello
-    # hello hello hello;
-    greeting = 'hello;'
-    print('hello')  # ;
-  learner_created: false
-- name: test/test_3.py
-  visible: false
-  text: |
-    print('hello')
-    print('hello')  # TODO
-    print('hello')  # TODO # TODO
-    # todo
-    # TODO just do it
-    print('todo')
-    print('TODO TODO')
-    todo()
-    todo = 'todo'
-  learner_created: false
-- name: test/test_1.py
-  visible: false
-  text: |
-    print('hello')
-     print('hello')
-      print('hello')
-        print('hello')
-          print('hello')
-            print('hello')
-  learner_created: false
 - name: test/test_0.py
   visible: false
   text: |
@@ -265,49 +320,6 @@ files:
      print('hellooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo'); #TODO
      print('hellooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo'); #TODO
   learner_created: false
-- name: test/test_5.py
-  visible: false
-  text: |-
-    print('hello!')
-    # just a comment
-    print('hello!')  #
-    print('hello!')  # hello
-
-    print('hello!') # hello
-    print('hello!')# hello
-  learner_created: false
-- name: test/test_4.py
-  visible: false
-  text: |
-    print("hello")
-
-
-    print("bye")
-
-
-
-    print("check")
-  learner_created: false
-- name: test/test_6.py
-  visible: false
-  text: |
-    print('What\'s your name?') # reading an input
-    name = input();
-    print(f'Hello, {name}');  # here is an obvious comment: this prints greeting with a name
-
-
-    very_big_number = 11_000_000_000_000_000_000_000_000_000_000_000_000_000_000_000
-    print(very_big_number)
-
-
-
-    def some_fun():
-        print('NO TODO HERE;;')
-        pass; # Todo something
-  learner_created: false
-feedback_link: https://hyperskill.org/projects/112/stages/610/implement#comment
+feedback_link: https://hyperskill.org/learn/step/9904#comment
 status: Solved
-feedback:
-  message: Congratulations!
-  time: Sun, 30 Jan 2022 18:17:11 UTC
-record: 2
+record: 1

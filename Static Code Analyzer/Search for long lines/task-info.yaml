@@ -55,11 +55,6 @@ files:
     if __name__ == '__main__':
         AnalyzerTest("analyzer.code_analyzer").run_tests()
   learner_created: false
-- name: analyzer/code_analyzer.py
-  visible: true
-  text: |
-    # write your code here
-  learner_created: false
 - name: test/multiple_long_lines.py
   visible: false
   text: |
@@ -70,19 +65,21 @@ files:
     very_big_number = 11_000_000_000_000_000_000_000_000_000_000_000_000_000_000_000
     print(very_big_number)
   learner_created: false
-- name: test/single_line_valid_example.py
-  visible: false
-  text: |
-    print('Hello, World')
-  learner_created: false
 - name: test/single_long_line_example.py
   visible: false
   text: |
     print('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA!')
   learner_created: false
-feedback_link: https://hyperskill.org/projects/112/stages/609/implement#comment
+- name: test/single_line_valid_example.py
+  visible: false
+  text: |
+    print('Hello, World')
+  learner_created: false
+- name: analyzer/code_analyzer.py
+  visible: true
+  text: |
+    # write your code here
+  learner_created: false
+feedback_link: https://hyperskill.org/learn/step/9903#comment
 status: Solved
-feedback:
-  message: Congratulations!
-  time: Sun, 30 Jan 2022 15:51:27 UTC
-record: 1
+record: 3

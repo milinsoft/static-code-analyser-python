@@ -3,10 +3,108 @@ files:
 - name: analyzer/code_analyzer.py
   visible: true
   text: |
-    # write your code here
+    import sys
+    from os.path import exists
+    import os.path
+
+    errors = {
+        "S001": "Too long. Please make sure that each "
+                "line is no longer than 49 characters",
+
+        "S002": "Indentation is not a multiple of four",
+        "S003": "Unnecessary semicolon after a statement "
+                "(note that semicolons are acceptable in comments)",
+        "S004": "Less than two spaces before inline comments",
+        "S005": "TODO found (in comments only and case-insensitive)",
+        "S006": "More than two blank lines preceding a code "
+                "line (applies to the first non-empty line)."
+    }
+
+
+    def scan_code(code, pth):
+        # Iterating over the lines
+        # mode
+
+        for line in range(len(code)):
+            comment_start_index = code[line].find("#")
+            path = pth
+
+            if len(code[line]) > 49:
+                print(f"{path}: Line {line + 1}: S001", errors["S001"])
+
+            if len(code[line]) >= 5:
+                identation = len(code[line]) - len(code[line].lstrip(" "))
+                if identation % 4 != 0:
+                    print(f"{path}: Line {line + 1}: S002", errors["S002"])
+
+            if ";" in code[line]:
+                if any([comment_start_index == -1 and code[line][-1] == ";",
+                        comment_start_index > code[line].find(";")]):
+                    print(f"{path}: Line {line + 1}: S003", errors["S003"])
+
+            if len(code[line]) >= 3 and "#" in code[line]:
+                if comment_start_index > 0 and code[line].find("  ") != comment_start_index - 2:
+                    print(f"{path}: Line {line + 1}: S004", errors["S004"])
+
+            if "todo" in code[line].lower():
+                if comment_start_index != -1 and comment_start_index < code[line].lower().find("todo"):
+                    print(f"{path}: Line {line + 1}: S005", errors["S005"])
+
+            if line >= 2 and code[line] != "":
+                if code[line-1] == code[line-2] == code[line-3]:
+                    print(f"{path}: Line {line + 1}: S006", errors["S006"])
+
+
+    #if len(sys.argv) != 2:
+    #    exit(print("error. 2 positional arguments expected."))
+
+
+    path = sys.argv[1].lower()
+
+    #path = "/Users/aleksander/PycharmProjects/Static Code Analyzer/Static Code Analyzer/task/test"
+
+
+    mode = "file" if path.endswith(".py") else "dir"
+
+
+    #if not exists(path):
+    #    exit(print('path does not exist'))
+
+
+    if mode == "file":
+
+        with open(path, "r") as file:
+            code_as_list: list = [x.strip("\n") for x in file.readlines()]
+            scan_code(code_as_list, path)
+
+    else:
+        os.chdir(path)
+
+        python_scripts: list = sorted([x.name for x in os.scandir() if x.name.endswith(".py")])
+        for script in python_scripts:
+            # file_path = os.path.join(path, script)
+            # print("fp", script)
+            # print(os.path.exists(script))
+
+            with open(script, "r") as file:
+                code_as_list: list = [x.strip("\n") for x in file.readlines()]
+                scan_code(code_as_list, script)  # os.path.join(path, script)
+
+        # problem is that file "tests.py" is not in "test" folder and should not be checked.
   learner_created: false
-- name: test/test_1.py
-  visible: false
+- name: test/test_5.py
+  visible: true
+  text: |-
+    print('hello!')
+    # just a comment
+    print('hello!')  #
+    print('hello!')  # hello
+
+    print('hello!') # hello
+    print('hello!')# hello
+  learner_created: false
+- name: test/test_6.py
+  visible: true
   text: |
     print('What\'s your name?') # reading an input
     name = input();
@@ -22,24 +120,62 @@ files:
         print('NO TODO HERE;;')
         pass; # Todo something
   learner_created: false
-- name: test/test_2.py
-  visible: false
+- name: test/test_4.py
+  visible: true
   text: |
-    class  Person:
-        pass
+    print("hello")
 
-    class user:
 
-        def __init__(self):
-            pass
+    print("bye")
 
-        @staticmethod
-        def _print1():
-            print('q')
 
-        @staticmethod
-        def Print2():
-            print('q')
+
+    print("check")
+  learner_created: false
+- name: test/test_1.py
+  visible: true
+  text: |
+    print('hello')
+     print('hello')
+      print('hello')
+        print('hello')
+          print('hello')
+            print('hello')
+  learner_created: false
+- name: test/test_2.py
+  visible: true
+  text: |
+    print('hello')
+    print('hello');
+    print('hello');;;
+    print('hello');  # hello
+    # hello hello hello;
+    greeting = 'hello;'
+    print('hello')  # ;
+  learner_created: false
+- name: test/test_3.py
+  visible: true
+  text: |
+    print('hello')
+    print('hello')  # TODO
+    print('hello')  # TODO # TODO
+    # todo
+    # TODO just do it
+    print('todo')
+    print('TODO TODO')
+    todo()
+    todo = 'todo'
+  learner_created: false
+- name: test/test_0.py
+  visible: true
+  text: |
+    if True:
+
+
+
+
+     print('hellooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo'); #TODO
+     print('hellooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo'); #TODO
   learner_created: false
 - name: test/this_stage/test_3.py
   visible: false
@@ -321,6 +457,6 @@ files:
     if __name__ == '__main__':
         AnalyzerTest("analyzer.code_analyzer").run_tests()
   learner_created: false
-feedback_link: https://hyperskill.org/projects/112/stages/613/implement#comment
+feedback_link: https://hyperskill.org/learn/step/9907#comment
 status: Unchecked
 record: -1

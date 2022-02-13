@@ -3,7 +3,7 @@ hyperskill_project:
   ide_files: https://stepik.org/media/attachments/lesson/369660/additional_files.json
   is_template_based: false
   use_ide: true
-update_date: Thu, 01 Jan 1970 00:00:00 UTC
+update_date: Sun, 13 Feb 2022 13:51:46 UTC
 stages:
 - id: 609
   step: 9903
@@ -13,7 +13,7 @@ stages:
   is_completed: true
 - id: 611
   step: 9905
-  is_completed: false
+  is_completed: true
 - id: 612
   step: 9906
   is_completed: false
@@ -60,6 +60,10 @@ topics:
     theory_id: 6302
   - title: Load module
     theory_id: 6019
+  - title: Create module
+    theory_id: 6057
+  - title: Packages
+    theory_id: 6384
   - title: Errors
     theory_id: 6052
   - title: Exceptions
@@ -70,10 +74,16 @@ topics:
     theory_id: 6270
   - title: Assert statement
     theory_id: 10372
-  - title: PyCharm basics
-    theory_id: 6193
   - title: Command line overview
     theory_id: 8977
+  - title: Parameters and options
+    theory_id: 9746
+  - title: Pip
+    theory_id: 6230
+  - title: Virtual Environment
+    theory_id: 13923
+  - title: PyCharm basics
+    theory_id: 6193
   - title: Introduction to Linux
     theory_id: 9526
   - title: File modes and permissions
@@ -174,8 +184,6 @@ topics:
     theory_id: 13438
   - title: Unit testing
     theory_id: 7545
-  - title: Create module
-    theory_id: 6057
   - title: Class
     theory_id: 6661
   - title: Class instances
@@ -188,8 +196,6 @@ topics:
     theory_id: 11869
   - title: Unit testing in Python
     theory_id: 10795
-  - title: Parameters and options
-    theory_id: 9746
   - title: Command line arguments
     theory_id: 7981
   - title: os module
