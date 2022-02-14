@@ -3,21 +3,15 @@ import sys
 from os.path import exists
 import os
 
-errors = {
-    "S001": "Too long. Please make sure that each "
-            "line is no longer than 49 characters",
+# the first element reffers to "S001", the second to "S002" and so on. 
 
-    "S002": "Indentation is not a multiple of four",
-    "S003": "Unnecessary semicolon after a statement "
-            "(note that semicolons are acceptable in comments)",
-    "S004": "Less than two spaces before inline comments",
-    "S005": "TODO found (in comments only and case-insensitive)",
-    "S006": "More than two blank lines preceding a code "
-            "line (applies to the first non-empty line).",
-    "S007": "Too many spaces after construction_name (def or class)",
-    "S008": "Class name class_name should be written in CamelCase",
-    "S009": "Function name function_name should be written in snake_case.",
-}
+errors = ('Too long. Please make sure that each line is no longer than 49 characters', 
+          'Indentation is not a multiple of four', 
+          'Unnecessary semicolon after a statement (note that semicolons are acceptable in comments)', 
+          'Less than two spaces before inline comments', 'TODO found (in comments only and case-insensitive)', 
+          'More than two blank lines preceding a code line (applies to the first non-empty line).', 
+          'Too many spaces after construction_name (def or class)', 'Class name class_name should be written in CamelCase', 
+          'Function name function_name should be written in snake_case.')
 
 
 def scan_code(code, _path):
@@ -25,30 +19,30 @@ def scan_code(code, _path):
         comment_start_index = code[line].find("#")
 
         if len(code[line]) > 49:
-            print(f"{_path}: Line {line + 1}: S001", errors["S001"])
+            print(f"{_path}: Line {line + 1}: S001", errors[0])
 
         if len(code[line]) >= 5:
             identation = len(code[line]) - len(code[line].lstrip(" "))
             if identation % 4 != 0:
-                print(f"{_path}: Line {line + 1}: S002", errors["S002"])
+                print(f"{_path}: Line {line + 1}: S002", errors[1])
 
         if ";" in code[line]:
             if any([comment_start_index == -1 and code[line][-1] == ";",  # semicolon as a last symbol in the string (to avoid fake warning)
                     comment_start_index > code[line].find(";")]):
-                print(f"{_path}: Line {line + 1}: S003", errors["S003"])
+                print(f"{_path}: Line {line + 1}: S003", errors[2])
 
         if len(code[line]) >= 3 and "#" in code[line]:
             if comment_start_index > 0:
                 if code[line][comment_start_index-2:].find("  ") != 0:
-                    print(f"{_path}: Line {line + 1}: S004", errors["S004"])
+                    print(f"{_path}: Line {line + 1}: S004", errors[3])
 
         if "todo" in code[line].lower():
             if comment_start_index != -1 and comment_start_index < code[line].lower().find("todo"):
-                print(f"{_path}: Line {line + 1}: S005", errors["S005"])
+                print(f"{_path}: Line {line + 1}: S005", errors[4])
 
         if line >= 2 and code[line] != "":
             if code[line-1] == code[line-2] == code[line-3]:
-                print(f"{_path}: Line {line + 1}: S006", errors["S006"])
+                print(f"{_path}: Line {line + 1}: S006", errors[5])
 
         # make sure below cheks can be combined with other checks
 
@@ -56,18 +50,18 @@ def scan_code(code, _path):
             classname_last_index = re.search("class", code[line]).end()
 
             if re.search("class\s{2,}", code[line]):
-                print(f"{_path}: Line {line + 1}: S007", errors["S007"])
+                print(f"{_path}: Line {line + 1}: S007", errors[6])
 
             if not re.search(f"([A-Z]\w+)+", code[line]):
-                print(f"{_path}: Line {line + 1}: S008", errors["S008"])
+                print(f"{_path}: Line {line + 1}: S008", errors[7])
 
 
         if re.search("def", code[line]):
             if re.search("def\s{2,}", code[line]):
-                print(f"{_path}: Line {line + 1}: S007", errors["S007"])
+                print(f"{_path}: Line {line + 1}: S007", errors[6])
 
             if not re.match("_*[a-z0-9]+(_?[a-z0-9]+)*_*", code[line][4:]):
-                print(f"{_path}: Line {line + 1}: S009", errors["S009"])
+                print(f"{_path}: Line {line + 1}: S009", errors[8])
 
 
 
