@@ -166,61 +166,6 @@ files:
     todo()
     todo = 'todo'
   learner_created: false
-- name: test/test_0.py
-  visible: true
-  text: |
-    if True:
-
-
-
-
-     print('hellooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo'); #TODO
-     print('hellooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo'); #TODO
-  learner_created: false
-- name: test/this_stage/test_3.py
-  visible: false
-  text: |
-    class Test:
-        def __init__(self, alpha, beta=1):
-            self.alpha = alpha
-            self.beta = beta
-
-        def function(self):
-            print(self.alpha)
-
-        def mutable_var(self, s=[]):
-            print(s)
-
-        def okey(self, s=None):
-            print("okey")
-  learner_created: false
-- name: test/this_stage/test_4.py
-  visible: false
-  text: |
-    class Test:
-        def __init__(self, alpha, Beta=1):
-            self.alpha = alpha
-
-        def function(self):
-            print(self.alpha)
-
-        def okey(self, s=None):
-            print("okey")
-  learner_created: false
-- name: test/this_stage/test_5.py
-  visible: false
-  text: |
-    class Test:
-        def __init__(self, alpha, beta=1):
-            Beta = beta
-
-        def function(self):
-            print("Beta")
-
-        def okey(self, s=None):
-            Variable = s
-            print(Variable)
-  learner_created: false
 - name: tests.py
   visible: false
   text: |
@@ -457,6 +402,66 @@ files:
     if __name__ == '__main__':
         AnalyzerTest("analyzer.code_analyzer").run_tests()
   learner_created: false
+- name: test/this_stage/test_4.py
+  visible: false
+  text: |
+    class Test:
+        def __init__(self, alpha, Beta=1):
+            self.alpha = alpha
+
+        def function(self):
+            print(self.alpha)
+
+        def okey(self, s=None):
+            print("okey")
+  learner_created: false
+- name: test/this_stage/test_5.py
+  visible: false
+  text: |
+    class Test:
+        def __init__(self, alpha, beta=1):
+            Beta = beta
+
+        def function(self):
+            print("Beta")
+
+        def okey(self, s=None):
+            Variable = s
+            print(Variable)
+  learner_created: false
+- name: test/this_stage/test_3.py
+  visible: false
+  text: |
+    class Test:
+        def __init__(self, alpha, beta=1):
+            self.alpha = alpha
+            self.beta = beta
+
+        def function(self):
+            print(self.alpha)
+
+        def mutable_var(self, s=[]):
+            print(s)
+
+        def okey(self, s=None):
+            print("okey")
+  learner_created: false
 feedback_link: https://hyperskill.org/learn/step/9907#comment
-status: Unchecked
-record: -1
+status: Failed
+feedback:
+  message: |-
+    Wrong answer in test #1
+
+    A wrong number of warning messages. Your program should warn about nine mistakes in this test case
+
+    Please find below the output of your program during this failed test.
+
+    ---
+
+    Arguments: test/test_1.py
+
+    test/test_1.py: Line 2: S002 Indentation is not a multiple of four
+    test/test_1.py: Line 3: S002 Indentation is not a multiple of four
+    test/test_1.py: Line 5: S002 Indentation is not a multiple of four
+  time: Mon, 14 Feb 2022 13:05:00 UTC
+record: 5
