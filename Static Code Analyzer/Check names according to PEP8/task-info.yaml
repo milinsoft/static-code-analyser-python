@@ -469,17 +469,6 @@ files:
     if __name__ == '__main__':
         AnalyzerTest("analyzer.code_analyzer").run_tests()
   learner_created: false
-- name: test/test_0.py
-  visible: true
-  text: |
-    if True:
-
-
-
-
-     print('hellooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo'); #TODO
-     print('hellooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo'); #TODO
-  learner_created: false
 - name: test/this_stage/test_7.py
   visible: false
   text: |
@@ -528,28 +517,8 @@ files:
             print("hello")
   learner_created: false
 feedback_link: https://hyperskill.org/learn/step/9906#comment
-status: Failed
+status: Solved
 feedback:
-  message: |-
-    Wrong answer in test #6
-
-    It looks like there is no messages from your program.
-
-    Please find below the output of your program during this failed test.
-
-    ---
-
-    Arguments: test/test_6.py
-
-    test/test_6.py: Line 1: S004 Less than two spaces before inline comments
-    test/test_6.py: Line 2: S003 Unnecessary semicolon after a statement (note that semicolons are acceptable in comments)
-    test/test_6.py: Line 3: S001 Too long. Please make sure that each line is no longer than 49 characters
-    test/test_6.py: Line 3: S003 Unnecessary semicolon after a statement (note that semicolons are acceptable in comments)
-    test/test_6.py: Line 6: S001 Too long. Please make sure that each line is no longer than 49 characters
-    test/test_6.py: Line 11: S006 More than two blank lines preceding a code line (applies to the first non-empty line).
-    test/test_6.py: Line 11: S009 Function name function_name should be written in snake_case.
-    test/test_6.py: Line 13: S003 Unnecessary semicolon after a statement (note that semicolons are acceptable in comments)
-    test/test_6.py: Line 13: S004 Less than two spaces before inline comments
-    test/test_6.py: Line 13: S005 TODO found (in comments only and case-insensitive)
-  time: Sun, 13 Feb 2022 15:10:33 UTC
+  message: Congratulations!
+  time: Mon, 14 Feb 2022 12:11:22 UTC
 record: 4

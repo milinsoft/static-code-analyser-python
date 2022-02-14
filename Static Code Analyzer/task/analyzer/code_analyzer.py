@@ -1,4 +1,4 @@
-# import re
+import re
 import sys
 from os.path import exists
 import os
@@ -50,20 +50,25 @@ def scan_code(code, _path):
             if code[line-1] == code[line-2] == code[line-3]:
                 print(f"{_path}: Line {line + 1}: S006", errors["S006"])
 
-        """
-        if code[line].startswith("class"):
-            if code[line][5:8] == "  ":
+        # make sure below cheks can be combined with other checks
+
+        if re.search("class", code[line]):
+            classname_last_index = re.search("class", code[line]).end()
+
+            if re.search("class\s{2,}", code[line]):
                 print(f"{_path}: Line {line + 1}: S007", errors["S007"])
-            if "_" in line[8::]:
+
+            if not re.search(f"([A-Z]\w+)+", code[line]):
                 print(f"{_path}: Line {line + 1}: S008", errors["S008"])
 
-        if code[line].startswith("def"):
-            if code[line][3:6] == "  ":
+
+        if re.search("def", code[line]):
+            if re.search("def\s{2,}", code[line]):
                 print(f"{_path}: Line {line + 1}: S007", errors["S007"])
 
-            if not re.match("_*[a-z]+_[a-z]+_{0,2}", code[line][3:6]):
+            if not re.match("_*[a-z0-9]+(_?[a-z0-9]+)*_*", code[line][4:]):
                 print(f"{_path}: Line {line + 1}: S009", errors["S009"])
-        """
+
 
 
 if len(sys.argv) != 2:
