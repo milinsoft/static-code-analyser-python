@@ -415,20 +415,6 @@ files:
         def okey(self, s=None):
             print("okey")
   learner_created: false
-- name: test/this_stage/test_5.py
-  visible: false
-  text: |
-    class Test:
-        def __init__(self, alpha, beta=1):
-            Beta = beta
-
-        def function(self):
-            print("Beta")
-
-        def okey(self, s=None):
-            Variable = s
-            print(Variable)
-  learner_created: false
 - name: test/this_stage/test_3.py
   visible: false
   text: |
@@ -446,22 +432,16 @@ files:
         def okey(self, s=None):
             print("okey")
   learner_created: false
+- name: analyzer/backup.py
+  visible: true
+  learner_created: true
+- name: test/this_stage/test_5.py
+  visible: true
+  learner_created: true
 feedback_link: https://hyperskill.org/learn/step/9907#comment
-status: Failed
+status: Solved
 feedback:
-  message: |-
-    Wrong answer in test #1
-
-    A wrong number of warning messages. Your program should warn about nine mistakes in this test case
-
-    Please find below the output of your program during this failed test.
-
-    ---
-
-    Arguments: test/test_1.py
-
-    test/test_1.py: Line 2: S002 Indentation is not a multiple of four
-    test/test_1.py: Line 3: S002 Indentation is not a multiple of four
-    test/test_1.py: Line 5: S002 Indentation is not a multiple of four
-  time: Mon, 14 Feb 2022 13:05:00 UTC
+  message: Well done! You've finished the project. Select a new project on <a href="https://hyperskill.org/projects">JetBrains
+    Academy</a> to continue learning.
+  time: Wed, 23 Feb 2022 20:28:08 UTC
 record: 5

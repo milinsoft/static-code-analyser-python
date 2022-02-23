@@ -1,10 +1,11 @@
+import ast
 import os
 import re
 import sys
 from os.path import exists
 
-# the first element reffers to "S001", the second to "S002" and so on. 
 
+# the first element reffers to "S001", the second to "S002" and so on.
 errors = (('S001', 'Too long. Please make sure that each line is no longer than 49 characters'),
           ('S002', 'Indentation is not a multiple of four'),
           ('S003', 'Unnecessary semicolon after a statement (note that semicolons are acceptable in comments)'),
@@ -24,7 +25,56 @@ def output_the_error(_path, _line, error_code):
     print(f"{_path}: Line {_line + 1}: {errors[error_code][0]}", errors[error_code][1])
 
 
+def is_snake_case(var):
+    template = re.compile(r"\A_*[a-z0-9]+(_?[a-z0-9]+)*_*")
+    return template.match(var)  # is equivalent to re.match(template, var)
+
+
+class AstAnalyzer(ast.NodeVisitor):
+
+    def __init__(self, pth):
+        self.pth = pth
+        super().__init__()
+
+
+    def visit_ClassDef(self, node: ast.ClassDef):
+        #print(ast.dump(node))
+        self.generic_visit(node)
+
+
+    def visit_FunctionDef(self, node: ast.FunctionDef):
+        # getting fun names
+        # fun_names_def_line[node.lineno] = node.name
+        if not is_snake_case(node.name):
+            output_the_error(self.pth, node.lineno-1, 8)
+
+
+        # getting arg names
+        arg_names = [x.arg for x in node.args.args if not is_snake_case(x.arg)]
+        if arg_names:
+            output_the_error(self.pth, node.lineno-1, 9)
+
+
+        # getting list of mutable default args
+        mutable_default_args = [type(x) for x in node.args.defaults if isinstance(x, (ast.List, ast.Dict, ast.Set))]
+
+        # this is the last error that have to be printed
+        if mutable_default_args:
+            output_the_error(self.pth, node.lineno-1, 11)
+        self.generic_visit(node)
+
+
+    def visit_Name(self, node: ast.Assign):
+        if isinstance(node.ctx, ast.Store):
+            if not is_snake_case(node.id):  # node.id == variable_name
+                output_the_error(self.pth, node.lineno-1, 10)
+
+        # self.generic_visit(node)
+
+
 def scan_code(code, _path):
+
+
     for line in range(len(code)):
         comment_start_index = code[line].find("#")
 
@@ -57,16 +107,13 @@ def scan_code(code, _path):
         if re.search("class", code[line]):
             if re.search(r"class\s{2,}", code[line]):
                 output_the_error(_path, line, 6)
-
+            # TEST 2
             if not re.search(r"([A-Z]\w+)+", code[line]):
                 output_the_error(_path, line, 7)
 
         if re.search("def", code[line]):
             if re.search(r"def\s{2,}", code[line]):
                 output_the_error(_path, line, 6)
-
-            if not re.match("_*[a-z0-9]+(_?[a-z0-9]+)*_*", code[line][4:]):
-                output_the_error(_path, line, 8)
 
 
 if __name__ == '__main__':
@@ -85,6 +132,20 @@ if __name__ == '__main__':
             code_as_list: list = [x.strip("\n") for x in file.readlines()]
             scan_code(code_as_list, path)
 
+
+
+        with open(path, "r") as file:
+            # currently it is not working as I need to open file again!
+            # need to open file separately and call function!
+            # ast tree
+            tree = ast.parse(file.read(), type_comments=True)
+
+            analyzer = AstAnalyzer(path)
+            analyzer.visit(tree)
+
+
+
+
     else:
         python_scripts: list = []
 
@@ -100,3 +161,10 @@ if __name__ == '__main__':
             with open(python_script, "r") as file:
                 code_as_list: list = [x.strip("\n") for x in file.readlines()]
                 scan_code(code_as_list, python_script)
+
+            with open(python_script, "r") as file:
+                tree = ast.parse(file.read(), type_comments=True)
+                analyzer = AstAnalyzer(python_script)
+                analyzer.visit(tree)
+
+
