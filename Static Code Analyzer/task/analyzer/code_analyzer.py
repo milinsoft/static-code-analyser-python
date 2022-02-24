@@ -76,25 +76,30 @@ def scan_code(code, _path):
             identation = len(code[line]) - len(code[line].lstrip(" "))
             if identation % 4 != 0:
                 output_the_error(_path, line, 1)
+
         # S003 check
         if ";" in code[line]:
             if any([comment_start_index == -1 and code[line][-1] == ";",
                     # semicolon as a last symbol in the string (to avoid fake warning)
                     comment_start_index > code[line].find(";")]):
                 output_the_error(_path, line, 2)
+
         # S004 check
         if len(code[line]) >= 3 and "#" in code[line]:
             if comment_start_index > 0:  # in-line comment
                 if not re.search(r"\s{2}#", code[line]):
                     output_the_error(_path, line, 3)
+
         # S005 check
         if "todo" in code[line].lower():
             if comment_start_index != -1 and comment_start_index < code[line].lower().find("todo"):
                 output_the_error(_path, line, 4)
+
         # S006 check
         if line >= 2 and code[line]:
             if code[line - 1] == code[line - 2] == code[line - 3]:
                 output_the_error(_path, line, 5)
+
         # S007 check
         if re.search(r"[class|def]\s{2,}", code[line]):
             output_the_error(_path, line, 6)
