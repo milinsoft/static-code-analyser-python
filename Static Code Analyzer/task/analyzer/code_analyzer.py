@@ -6,25 +6,24 @@ from os.path import exists
 
 CAMEL_CASE_template = re.compile(r"([A-Z]\w+)+")
 
-# the first element reffers to "S001", the second to "S002" and so on.
-errors = (('S001', 'Too long. Please make sure that each line is no longer than 49 characters'),
-          ('S002', 'Indentation is not a multiple of four'),
-          ('S003', 'Unnecessary semicolon after a statement (note that semicolons are acceptable in comments)'),
-          ('S004', 'Less than two spaces before inline comments'),
-          ('S005', 'TODO found (in comments only and case-insensitive)'),
-          ('S006', 'More than two blank lines preceding a code line (applies to the first non-empty line).'),
-          ('S007', 'Too many spaces after construction_name (def or class)'),
-          )
 
+ERRORS = (
+    ('S001', 'Too long. Please make sure that each line is no longer than 79 characters'),
+    ('S002', 'Indentation is not a multiple of four'),
+    ('S003', 'Unnecessary semicolon after a statement (note that semicolons are acceptable in comments)'),
+    ('S004', 'Less than two spaces before inline comments'),
+    ('S005', 'TODO found (in comments only and case-insensitive)'),
+    ('S006', 'More than two blank lines preceding a code line (applies to the first non-empty line).'),
+    ('S007', 'Too many spaces after construction_name (def or class)'),
+)
 
-# ERRORS = []
 
 def output_the_error(_path, _line, error_code):
-    print(f"{_path}: Line {_line + 1}: {errors[error_code][0]}", errors[error_code][1])
+    print(f"{_path}: Line {_line}: {ERRORS[error_code][0]}", ERRORS[error_code][1])
 
 
 def is_snake_case(var):
-    template = re.compile(r"\A_*[a-z0-9]+(_?[a-z0-9]+)*_*")
+    template = re.compile(r"\A_*[a-z\d]+(_?\w+)*_*")
     return template.match(var)  # is equivalent to re.match(template, var)
 
 
@@ -63,46 +62,39 @@ class AstAnalyzer(ast.NodeVisitor):
                 print(f"{self.pth}: Line {node.lineno}: S011 Variable <{node.id}> should be written in snake_case")
 
 
-def scan_code(code, _path):
-    for line in range(len(code)):
-        comment_start_index = code[line].find("#")
+class PyCodeScanner:
+    @staticmethod
+    def scan_code(code, _path):
+        for n, line in enumerate(code, start=1):
+            comment_start_idx = line.find("#")
 
-        # S001 check
-        if len(code[line]) > 49:
-            output_the_error(_path, line, 0)
+            # S001 check
+            if len(line) > 79:
+                output_the_error(_path, n, 0)
 
-        # S002 check
-        if len(code[line]) >= 5:
-            identation = len(code[line]) - len(code[line].lstrip(" "))
-            if identation % 4 != 0:
-                output_the_error(_path, line, 1)
+            # S002 check
+            if len(line) >= 5 and (len(line) - len(line.lstrip(" "))) % 4:  # indentation
+                output_the_error(_path, n, 1)
 
-        # S003 check
-        if ";" in code[line]:
-            if any([comment_start_index == -1 and code[line][-1] == ";",
-                    # semicolon as a last symbol in the string (to avoid fake warning)
-                    comment_start_index > code[line].find(";")]):
-                output_the_error(_path, line, 2)
+            # S003 check
+            if ";" in line and (comment_start_idx == -1 and line[-1] == ";" or (comment_start_idx > line.find(";"))):
+                output_the_error(_path, n, 2)
 
-        # S004 check
-        if len(code[line]) >= 3 and "#" in code[line]:
-            if comment_start_index > 0:  # in-line comment
-                if not re.search(r"\s{2}#", code[line]):
-                    output_the_error(_path, line, 3)
+            # S004 check
+            if len(line) >= 3 and "#" in line and comment_start_idx and not re.search(r"\s{2}#", line):
+                output_the_error(_path, n, 3)  # in-line comment
 
-        # S005 check
-        if "todo" in code[line].lower():
-            if comment_start_index != -1 and comment_start_index < code[line].lower().find("todo"):
-                output_the_error(_path, line, 4)
+            # S005 check
+            if "todo" in line.lower() and comment_start_idx != -1 and comment_start_idx < line.lower().find("todo"):
+                output_the_error(_path, n, 4)
 
-        # S006 check
-        if line >= 2 and code[line]:
-            if code[line - 1] == code[line - 2] == code[line - 3]:
-                output_the_error(_path, line, 5)
+            # S006 check
+            if n >= 2 and code[n - 2] == code[n - 3] == code[n - 4]:
+                output_the_error(_path, n, 5)
 
-        # S007 check
-        if re.search(r"[class|def]\s{2,}", code[line]):
-            output_the_error(_path, line, 6)
+            # S007 check
+            if re.search(r"(class|def)\s{2,}", line):
+                output_the_error(_path, n, 6)
 
 
 if __name__ == '__main__':
@@ -113,30 +105,25 @@ if __name__ == '__main__':
     if not exists(path):
         exit(print('path does not exist'))
 
-    if path.endswith(".py"):
-        with open(path, "r") as file:
+    def analyze_py_file(path_to_file):
+        with open(path_to_file, "r") as file:
             code_as_list: list = [x.strip("\n") for x in file.readlines()]
-            scan_code(code_as_list, path)
+            PyCodeScanner.scan_code(code_as_list, path_to_file)
 
-        with open(path, "r") as file:
+        with open(path_to_file, "r") as file:
             tree = ast.parse(file.read(), type_comments=True)
-            analyzer = AstAnalyzer(path)
+            analyzer = AstAnalyzer(path_to_file)
             analyzer.visit(tree)
 
+    if path.endswith(".py"):
+        analyze_py_file(path)
+
     else:
-        python_scripts: list = []
-        for dirpath, dirnames, files in os.walk(path):
+        python_scripts = []
+        for dir_path, dir_names, files in os.walk(path):
             for file_name in files:
                 if file_name.endswith('.py'):
-                    python_scripts.append(os.path.join(dirpath, file_name))
+                    python_scripts.append(os.path.join(dir_path, file_name))
 
-        python_scripts: tuple = tuple(sorted(python_scripts))  # saving some memory
-        for python_script in python_scripts:
-            with open(python_script, "r") as file:
-                code_as_list: list = [x.strip("\n") for x in file.readlines()]
-                scan_code(code_as_list, python_script)
-
-            with open(python_script, "r") as file:
-                tree = ast.parse(file.read(), type_comments=True)
-                analyzer = AstAnalyzer(python_script)
-                analyzer.visit(tree)
+        for python_script in sorted(python_scripts):
+            analyze_py_file(python_script)
