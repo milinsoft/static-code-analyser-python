@@ -1,4 +1,4 @@
-# static-code-analyser-python
+# Static Code Analyser for Python files
 JetBrains static-code-analyser-python
 
 The program accepts either path to python script or path to the folder with multiple python scripts.
